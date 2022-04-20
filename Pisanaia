@@ -1,0 +1,126 @@
+#include <iostream>
+#include <fstream>
+#include <algorithm>
+#include <list>
+#include <vector>
+#include <utility>
+#include <functional>
+#include <iterator>
+#include <string>
+
+using namespace std;
+
+
+int main() {
+
+    system("chcp 65001");//русский язык
+   list<pair<bool*,int> > pikcha;
+   list<pair<bool*,int> > pikchavivod;
+   int i;
+   int n;
+   cout<<"Введите колличество строк"<<endl;
+   cin>>i;
+   cout<<"Введите колличество столбцов"<<endl;
+   cin>>n;
+    for (int j = 0; j < i+2; ++j) {//генерим строки
+        pikcha.push_back(make_pair(new bool [n+2],1) );
+        pikchavivod.push_back(make_pair(new bool [n+2],1) );
+    }
+
+
+//Дверь запили мне (рамку)
+    for (auto iter = pikcha.begin(); iter !=pikcha.end(); iter++) {
+        iter->first[0]=1;
+        iter->first[n+1]=1;
+    }
+    auto iter=pikcha.end();
+    iter--;
+    for (int j = 0; j < n+2; ++j) {
+        pikcha.begin()->first[j]=1;
+        iter->first[j]=1;
+    }
+//Запилили дверь!!!!!
+
+    char ch='0';
+
+//ЭКСТРОПРЕИРУМ данные из файлика
+    ifstream fin("C:\\tyt_tekst\\lenin.txt");
+    auto peremen=++pikchavivod.begin();
+    for (auto iter = ++pikcha.begin(); iter != --pikcha.end(); ++iter,++peremen) {
+
+        for (int k = 1; k < n+2; ++k) {
+            ch = fin.get();
+            iter->first[k]= ch-48;
+            peremen->first[k]= ch-48;
+        }
+    }
+
+
+
+//проверка вывод
+    //for (auto iter = pikcha.begin(); iter != pikcha.end(); ++iter) {
+      //  for (int k = 0; k < n + 2; ++k) {
+        //    cout << iter->first[k] << " ";
+        //}
+       // cout << endl;
+    //}
+
+
+    cout<<endl<<endl;
+    //делотация
+auto peremeniter=pikchavivod.begin();
+peremeniter++;
+
+    for (auto iter = ++pikcha.begin(); iter != --pikcha.end(); ++iter,++peremeniter) {
+
+        for (int k = 1; k < n+1; ++k) {
+            if (iter->first[k]==1){
+                peremeniter->first[k-1]=1;
+                peremeniter->first[k+1]=1;
+                peremeniter--;
+                peremeniter->first[k]=1;
+                peremeniter++;
+                peremeniter++;
+                peremeniter->first[k]=1;
+                peremeniter--;
+            }
+        }
+    }
+
+
+
+
+    //розия
+
+    peremeniter=pikchavivod.begin();
+    peremeniter++;
+
+    for (auto iter = ++pikcha.begin(); iter != --pikcha.end(); ++iter,++peremeniter) {
+
+        for (int k = 1; k < n+1; ++k) {
+            if (iter->first[k]==1){
+                peremeniter->first[k]=0;
+            }
+
+        }
+    }
+
+
+    ofstream fout("C:\\tyt_tekst\\obrazlenina");
+    for (auto iter = ++pikchavivod.begin(); iter != --pikchavivod.end(); ++iter) {
+        for (int k = 1; k < n + 1; ++k) {
+            fout << iter->first[k];
+        //    cout << iter->first[k] << " ";
+        }
+        fout  << "\n ";
+       // cout << endl;
+    }
+    fout.close();
+
+
+
+    //чистим вилкой
+
+
+    return 0;
+}
